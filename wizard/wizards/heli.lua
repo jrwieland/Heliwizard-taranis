@@ -26,8 +26,7 @@ local pages = {}
 local fields = {}
 local switches = {"SA", "SB", "SC", "SD", "SE", "SF", "SG"}
 local switchValues = {[0]=2, 5, 8, 11, 14, 17, 19}
-local ImgPageUp = "img/page.bmp"
-local ImgPageDn = "img/pagebk.bmp"
+local ImgPageDn = "img/page-btn.bmp"
 
 -- Change display attribute to current field
 local function addField(step)
@@ -91,6 +90,9 @@ end
 local function runFieldsPage(event)
   if event == EVT_VIRTUAL_EXIT then -- exit script
     return 2
+    -- elseif page==#pages and event == EVT_ENTER_LONG then
+    --   runCreateModel()
+    --   return 2
   elseif event == EVT_VIRTUAL_ENTER then -- toggle editing/selecting current field
     if fields[current][5] ~= nil then
       edit = not edit
@@ -127,19 +129,19 @@ local function setFieldsVisible(...)
 end
 
 local TypeFields = {
-  {20, 12, COMBO, 1, 0, {"FBL", "FB" } },
-  {20, 36, COMBO, 1, 0, {"120", "120X", "140", "90" } },
+  {23, 12, COMBO, 1, 0, {"FBL", "FB" } },
+  {23, 36, COMBO, 1, 0, {"120", "120X", "140", "90" } },
 }
 
 local function runTypeConfig(event)
   lcd.clear()
   fields = TypeFields
-  lcd.drawPixmap(LCD_W-13, 14,ImgPageUp)
-  lcd.drawPixmap(120, 2,"img/heli-type.bmp")
-  lcd.drawText(20, 2, "Helicopter Type?")
+  lcd.drawPixmap(0, 14,"img/page.bmp")
+  lcd.drawPixmap(123, 2,"img/heli-type.bmp")
+  lcd.drawText(23, 2, "Helicopter Type?")
   fields[2][4] = 0
   if fields[1][5] == 1 then
-    lcd.drawText(20, 25, "Swash Type")
+    lcd.drawText(23, 25, "Swash Type")
     fields[2][4] = 1
   end
   local result = runFieldsPage(event)
@@ -147,41 +149,39 @@ local function runTypeConfig(event)
 end
 
 local StyleFields = {
-  {20, 12, COMBO, 1, 0, { "Sport", "Light 3D","Full 3D" } },
+  {23, 12, COMBO, 1, 0, { "Sport", "Light 3D","Full 3D" } },
 }
 
 local function runStyleConfig(event)
   lcd.clear()
-  lcd.drawPixmap(LCD_W-13, 14,ImgPageUp)
   lcd.drawPixmap(0, 14,ImgPageDn)
   lcd.drawPixmap(130, 2,"img/heli-style.bmp")
   fields = StyleFields
-  lcd.drawText(20, 2, "Your Flying Style")
+  lcd.drawText(23, 2, "Your Flying Style")
   fields[1][4]=1
   local result = runFieldsPage(event)
   return result
 end
 
 local SwitchFields = {
-  {20, 12, COMBO, 1, 1, { "SA", "SB", "SC", "SD", "SE", "SF" } },
-  {20, 33, COMBO, 1, 5, { "SA", "SB", "SC", "SD", "SE", "SF","SG" } },
-  {20, 54, COMBO, 1, 0, { "SA", "SB", "SC", "SD", "SE", "SF","SG" } },
+  {23, 12, COMBO, 1, 1, { "SA", "SB", "SC", "SD", "SE", "SF" } },
+  {23, 33, COMBO, 1, 5, { "SA", "SB", "SC", "SD", "SE", "SF","SG" } },
+  {23, 54, COMBO, 1, 0, { "SA", "SB", "SC", "SD", "SE", "SF","SG" } },
 }
 
 local function runSwitchConfig(event)
   lcd.clear()
-  lcd.drawPixmap(LCD_W-13, 14,ImgPageUp)
   lcd.drawPixmap(0, 14,ImgPageDn)
-  lcd.drawPixmap(130, 10,"img/heli-switch.bmp")
-  lcd.drawText(100, 45, "Assign Switches")
+  lcd.drawPixmap(140, 7,"img/heli-switch.bmp")
+  lcd.drawText(110, 38, "Assign Switches")
   fields = SwitchFields
-  lcd.drawText(20, 2, "FM (Idle Up)")
+  lcd.drawText(23, 2, "FM (Idle Up)")
   fields[1][4]=1
-  lcd.drawText(20, 22, "Throttle Hold")
+  lcd.drawText(23, 22, "Throttle Hold")
   fields[2][4]=1
   fields[3][4]=0
   if TypeFields[1][5]==1 then
-    lcd.drawText(20, 44, "Gyro Rate")
+    lcd.drawText(23, 44, "Gyro Rate")
     fields[3][4]=1
   end
   local result = runFieldsPage(event)
@@ -189,36 +189,34 @@ local function runSwitchConfig(event)
 end
 
 local ThrFields = {
-  {20, 12, COMBO, 1, 2, { "CH1", "CH2", "CH3", "CH4", "CH5", "CH6", "CH7", "CH8" } },
+  {23, 12, COMBO, 1, 2, { "CH1", "CH2", "CH3", "CH4", "CH5", "CH6", "CH7", "CH8" } },
 }
 
 local function runThrConfig(event)
   lcd.clear()
-  lcd.drawPixmap(LCD_W-13, 14,ImgPageUp)
   lcd.drawPixmap(0, 14,ImgPageDn)
-  lcd.drawPixmap(108, 6,"img/heli-throttle.bmp")
+  lcd.drawPixmap(118, 6,"img/heli-throttle.bmp")
   fields = ThrFields
-  lcd.drawText(20, 2, "Throttle Channel")
+  lcd.drawText(23, 2, "Throttle Channel")
   fields[1][4]=1
   local result = runFieldsPage(event)
   return result
 end
 
 local CurveFields = {
-  {20, 12, COMBO, 1, 0, { "Thr Up", "V Curve","Flat" } },
-  {20, 33, COMBO, 1, 0, { "V Curve","Flat" } },
-  {20, 54, COMBO, 1, 0, { "V Curve","Flat" } },
+  {23, 12, COMBO, 1, 0, { "Thr Up", "V Curve","Flat" } },
+  {23, 33, COMBO, 1, 0, { "V Curve","Flat" } },
+  {23, 54, COMBO, 1, 0, { "V Curve","Flat" } },
 }
 
 local function runCurveConfig(event)
   lcd.clear()
-  lcd.drawPixmap(LCD_W-13, 14,ImgPageUp)
   lcd.drawPixmap(0, 14,ImgPageDn)
   lcd.drawText(150, 2, "Curve")
   lcd.drawText(142, 10, "Examples")
   lcd.drawPixmap(150, 18,"img/heli-curves.bmp")
   fields = CurveFields
-  lcd.drawText(20, 2, "FM0 Curve")
+  lcd.drawText(23, 2, "FM0 Curve")
   fields[1][4]=1
   lcd.drawText(40, 22, "FM1 Curve")
   fields[2][4]=1
@@ -229,48 +227,45 @@ local function runCurveConfig(event)
 end
 
 local AilerFields = {
-  {20, 12, COMBO, 1, 0, { "CH1", "CH2", "CH3", "CH4", "CH5", "CH6", "CH7", "CH8" } },
+  {23, 12, COMBO, 1, 0, { "CH1", "CH2", "CH3", "CH4", "CH5", "CH6", "CH7", "CH8" } },
 }
 
 local function runAilerConfig(event)
   lcd.clear()
-  lcd.drawPixmap(LCD_W-13, 14,ImgPageUp)
   lcd.drawPixmap(0, 14,ImgPageDn)
   lcd.drawPixmap(130, 2,"img/heli-ailer.bmp")
   fields = AilerFields
-  lcd.drawText(20, 2, "Aileron Channel")
+  lcd.drawText(23, 2, "Aileron Channel")
   fields[1][4]=1
   local result = runFieldsPage(event)
   return result
 end
 
 local EleFields = {
-  {20, 12, COMBO, 1, 1, { "CH1", "CH2", "CH3", "CH4", "CH5", "CH6", "CH7", "CH8" } },
+  {23, 12, COMBO, 1, 1, { "CH1", "CH2", "CH3", "CH4", "CH5", "CH6", "CH7", "CH8" } },
 }
 
 local function runEleConfig(event)
   lcd.clear()
-  lcd.drawPixmap(LCD_W-13, 14,ImgPageUp)
   lcd.drawPixmap(0, 14,ImgPageDn)
-  lcd.drawPixmap(100, 20,"img/heli-helev.bmp")
+  lcd.drawPixmap(107,23,"img/heli-elev.bmp")
   fields = EleFields
-  lcd.drawText(20, 2, "Elevator Channel")
+  lcd.drawText(23, 2, "Elevator Channel")
   fields[1][4]=1
   local result = runFieldsPage(event)
   return result
 end
 
 local RudFields = {
-  {20, 12, COMBO, 1, 3, { "CH1", "CH2", "CH3", "CH4", "CH5", "CH6", "CH7", "CH8" } },
+  {23, 12, COMBO, 1, 3, { "CH1", "CH2", "CH3", "CH4", "CH5", "CH6", "CH7", "CH8" } },
 }
 
 local function runRudConfig(event)
   lcd.clear()
-  lcd.drawPixmap(LCD_W-13, 14,ImgPageUp)
   lcd.drawPixmap(0, 14,ImgPageDn)
   lcd.drawPixmap(130, 2,"img/heli-rud.bmp")
   fields = RudFields
-  lcd.drawText(20, 2, "Rudder (Tail) Channel")
+  lcd.drawText(23, 2, "Rudder (Tail) Channel")
   fields[1][4]=1
   local result = runFieldsPage(event)
   return result
@@ -279,19 +274,19 @@ end
 local lineIndex
 
 local function drawNextChanelLine(text, text2)
-  lcd.drawText(20, lineIndex, text)
+  lcd.drawText(23, lineIndex, text)
   lcd.drawText(95, lineIndex, ": CH" .. text2 + 1)
   lineIndex = lineIndex + 9
 end
 
 local function drawNextSwitchLine(text, text2)
-  lcd.drawText(20, lineIndex, text)
+  lcd.drawText(23, lineIndex, text)
   lcd.drawText(95, lineIndex, ": " ..switches[text2 + 1])
   lineIndex = lineIndex + 9
 end
 
 local function drawNextTextLine(text, text2)
-  lcd.drawText(20, lineIndex, text)
+  lcd.drawText(23, lineIndex, text)
   lcd.drawText(95, lineIndex, ": " ..text2)
   lineIndex = lineIndex + 9
 end
@@ -303,22 +298,21 @@ local function switchLine(text)
 end
 
 local SummaryFields = {
-  {25, 56, {1} },
+  {23, 56, {1}},
 }
 
 local function runSummary(event)
   lcd.clear()
   lcd.drawScreenTitle("Summary", 1,2)
-  lcd.drawPixmap(LCD_W-13, 14,ImgPageUp)
   lcd.drawPixmap(0, 14,ImgPageDn)
   fields = SummaryFields
   lineIndex = 9
 
   -- Type
   if TypeFields[1][5]==0 then
-    drawNextTextLine("Type","FBL")
+    drawNextTextLine("TYPE","FBL")
   else
-    drawNextTextLine("Type","FB")
+    drawNextTextLine("TYPE","FB")
     if TypeFields[2][5]==0 then
       lcd.drawText(118,9,"Swash 120")
     elseif TypeFields[2][5]==1 then
@@ -340,30 +334,31 @@ local function runSummary(event)
   end
 
   -- Switch
-  drawNextSwitchLine("FM Sw",SwitchFields[1][5])
-  drawNextSwitchLine("Th Hold Sw",SwitchFields[2][5])
+  drawNextSwitchLine("FM SW",SwitchFields[1][5])
+  drawNextSwitchLine("Th Hold SW",SwitchFields[2][5])
   if TypeFields[1][5]==1 then
-    drawNextSwitchLine("Gyro Rate Sw",SwitchFields[3][5])
+    drawNextSwitchLine("Gyro Rate SW",SwitchFields[3][5])
   end
 
   -- thr
   drawNextChanelLine("Throttle",ThrFields[1][5])
-  fields[1][5]=1
+  fields[1][4]=1
   local result = runFieldsPage(event)
   return result
 end
 
 local ConfigSummaryFields = {
-  {10, 58,{1} },
+  {10, 58,{1}},
 }
 
 local function runConfigSummary(event)
   lcd.clear()
-  lcd.drawScreenTitle("Summary - Page to Create Model", 2,2)
-  lcd.drawPixmap(0, 14,ImgPageDn)
-  lcd.drawPixmap(LCD_W-13, 14,ImgPageUp)
+  lcd.drawScreenTitle("Summary - Long Enter -> Create Model", 2,2)
+  lcd.drawPixmap(LCD_W-18, LCD_H-17, "img/confirm-tick.bmp")
+  lcd.drawPixmap(0, 14,"img/pagebk.bmp")
   fields = ConfigSummaryFields
   lineIndex = 8
+
   -- FM0 Curve
   if CurveFields[1][5]==0 then
     drawNextTextLine("FM0 Curve","Throttle Up")
@@ -400,7 +395,7 @@ local function runConfigSummary(event)
   return result
 end
 
-local function createModel(event)
+local function runCreateModel(event)
   lcd.clear()
   local b = SwitchFields[1][5]
   local tUp = switchValues[b]
@@ -413,7 +408,7 @@ local function createModel(event)
 
   -- Curve Fm0
   if StyleFields[1][5]==0 and CurveFields[1][5]==0 then
-    model.setCurve(0,{name="TC0",y={-100, 0, 20, 40, 40}})
+    model.setCurve(0,{name="TC0",y={-100, 0, 23, 40, 40}})
   elseif StyleFields[1][5]==1 and CurveFields[1][5]==0 then
     model.setCurve(0,{name="TC0",y={-100, 0, 35, 50, 50}})
   elseif StyleFields[1][5]==2 and CurveFields[1][5]==0 then
@@ -505,21 +500,14 @@ local function createModel(event)
 
   --Set Swash Parameters
   if TypeFields[1][5]==1 and TypeFields[2][5]==0 then
-    model.swashRingData(0,0,{type="1",collectiveSource=90,aileronSource=91,elevatorSource=89,collectiveWeight=60,aileronWeight=60,elevatorWeight=60})
+    model.swashRingData({type="1",collectiveSource=90,aileronSource=91,elevatorSource=89,collectiveWeight=60,aileronWeight=60,elevatorWeight=60})
   elseif TypeFields[2][5]==1 then
-    model.swashRingData(0,0,{type="2",collectiveSource=90,aileronSource=91,elevatorSource=89,collectiveWeight=60,aileronWeight=60,elevatorWeight=60})
+    model.swashRingData({type="2",collectiveSource=90,aileronSource=91,elevatorSource=89,collectiveWeight=60,aileronWeight=60,elevatorWeight=60})
   elseif TypeFields[2][5]==2 then
-    model.swashRingData(0,0,{type="3",collectiveSource=90,aileronSource=91,elevatorSource=89,collectiveWeight=40,aileronWeight=40,elevatorWeight=60})
+    model.swashRingData({type="3",collectiveSource=90,aileronSource=91,elevatorSource=89,collectiveWeight=40,aileronWeight=40,elevatorWeight=60})
   elseif TypeFields[2][5]==3 then
-    model.swashRingData(0,0,{type="4",collectiveSource=90,aileronSource=91,elevatorSource=89,collectiveWeight=35,aileronWeight=35,elevatorWeight=60})
-  else
+    model.swashRingData({type="4",collectiveSource=90,aileronSource=91,elevatorSource=89,collectiveWeight=35,aileronWeight=35,elevatorWeight=60})
   end
-  return 2
-end
-
-local function closing(event)
-  lcd.clear()
-  lcd.drawText(20,15,"Model Sucessfully created !")
 end
 
 -- Init
@@ -536,8 +524,6 @@ local function init()
     runRudConfig,
     runSummary,
     runConfigSummary,
-    createModel,
-    closing,
   }
 end
 
@@ -546,8 +532,12 @@ local function run(event)
   if event == nil then
     error("Cannot be run as a model script!")
     return 2
-  elseif event == EVT_VIRTUAL_NEXT_PAGE and page < #pages-1 then
+  elseif event == EVT_VIRTUAL_NEXT_PAGE and page < #pages then
     selectPage(1)
+  elseif event == EVT_VIRTUAL_ENTER_LONG and page == #pages then
+    runCreateModel(event)
+    lcd.drawText(23,15,"Model Sucessfully created !")
+    return 2
   elseif event == EVT_VIRTUAL_PREV_PAGE and page > 1 then
     killEvents(event);
     selectPage(-1)
