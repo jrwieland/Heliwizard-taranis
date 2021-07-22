@@ -8,7 +8,7 @@
  
  Delete the existing files in your SCRIPT/WIZARD folder
  
- Download the files (wizard.lu and img folder) and place them in your SCRIPT/WIZARD folder.
+ Download the files (wizard.lua and img folder) and place them in your SCRIPT/WIZARD folder.
  (the files have been remapped to the img folder).
  
  ## The Flybar setup will not work with until the next firmware update (2.3.15).
